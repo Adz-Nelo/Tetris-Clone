@@ -69,6 +69,11 @@ function draw() {
 
     fallingPiece.show();
 
+    // Draw ghost piece (shadow showing where piece will land)
+    if (!pauseGame && !gameOver) {
+        drawGhostPiece();
+    }
+
     if (keyIsDown(32)) {
         updateEvery = 1;
     } else if (keyIsDown(DOWN_ARROW)) {
@@ -124,10 +129,10 @@ function drawGradientRect(x, y, w, h, c1, c2) {
 }
 
 function drawEnhancedUI(bgColor, lightColor) {
-    drawUIPanel(450, 60, 140, 90, bgColor, 'SCORE', currentScore);
-    drawUIPanel(460, 350, 130, 50, bgColor, 'HIGH SCORE', highScore);
-    drawUIPanel(460, 210, 130, 60, bgColor, 'LEVEL', currentLevel);
-    drawUIPanel(460, 280, 130, 60, bgColor, 'LINES', linesCleared);
+    drawUIPanel(460, 60, 130, 90, bgColor, 'SCORE', currentScore);
+    drawUIPanel(460, 328, 130, 70, bgColor, 'HIGH SCORE!', highScore);
+    drawUIPanel(460, 193, 130, 60, bgColor, 'LEVEL', currentLevel);
+    drawUIPanel(460, 260, 130, 60, bgColor, 'LINES', linesCleared);
     
     fill(bgColor);
     stroke(lightColor);
@@ -138,7 +143,7 @@ function drawEnhancedUI(bgColor, lightColor) {
     noStroke();
     textSize(16);
     textAlign(CENTER);
-    text('NEXT', 525, 395);
+    text('NEXT', 525, 430);
 }
 
 function drawUIPanel(x, y, w, h, bgColor, label, value) {
@@ -276,8 +281,8 @@ function drawRestartModal() {
     
     textSize(12);
     textStyle(NORMAL);
-    text('(Y)', 220, 335);
-    text('(N)', 380, 335);
+    text(220, 335);
+    text(380, 335);
 }
 
 function drawGameOver() {
@@ -286,7 +291,7 @@ function drawGameOver() {
     rect(0, 0, width, height);
     
     let pulse = sin(frameCount * 0.1) * 10;
-    drawTextWithGlow('GAME OVER', 300, 220, 54 + pulse, '#e74c3c');
+    drawTextWithGlow('GAME OVER 😭', 300, 220, 54 + pulse, '#e74c3c');
     
     fill(255);
     textSize(18);
@@ -304,6 +309,65 @@ function drawGameOver() {
     textSize(16);
     textStyle(NORMAL);
     text('Press R to restart', 300, 340);
+}
+
+function drawGhostPiece() {
+    // Calculate where the piece would land
+    let ghostY = fallingPiece.pos.y;
+    let testY = ghostY;
+    
+    // Find the lowest position without collision
+    while (!testCollision(fallingPiece.pos.x, testY + fallSpeed, fallingPiece.rotation)) {
+        testY += fallSpeed;
+    }
+    
+    // Only draw if ghost is below current piece
+    if (testY <= ghostY) return;
+    
+    // Draw ghost pieces
+    const points = orientPoints(fallingPiece.pieceType, fallingPiece.rotation);
+    for (let i = 0; i < points.length; i++) {
+        let x = fallingPiece.pos.x + points[i][0] * gridSpace;
+        let y = testY + points[i][1] * gridSpace;
+        
+        // Draw semi-transparent ghost block
+        fill(colors[fallingPiece.pieceType] + '40'); // 40 = 25% opacity
+        stroke(colors[fallingPiece.pieceType] + 'AA'); // AA = 66% opacity
+        strokeWeight(2);
+        rect(x, y, gridSpace - 1, gridSpace - 1, 2);
+        
+        // Add highlight effect
+        noStroke();
+        fill(255, 60);
+        rect(x + 5, y + 5, gridSpace - 15, 2, 1);
+        rect(x + 5, y + 5, 2, gridSpace - 15, 1);
+    }
+}
+
+function testCollision(x, y, rotation) {
+    // Test collision for ghost piece calculation
+    let points = orientPoints(fallingPiece.pieceType, rotation);
+    
+    for (let i = 0; i < points.length; i++) {
+        let testX = x + points[i][0] * gridSpace;
+        let testY = y + points[i][1] * gridSpace;
+        
+        if (testX < gameEdgeLeft || testX + gridSpace > gameEdgeRight || testY + gridSpace > height) {
+            return true;
+        }
+        
+        for (let j = 0; j < gridPieces.length; j++) {
+            if (testX === gridPieces[j].pos.x) {
+                if (testY >= gridPieces[j].pos.y && testY < gridPieces[j].pos.y + gridSpace) {
+                    return true;
+                }
+                if (testY + gridSpace > gridPieces[j].pos.y && testY + gridSpace <= gridPieces[j].pos.y + gridSpace) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 function updateParticles() {

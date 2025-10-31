@@ -9,11 +9,11 @@ function initAudio() {
     // Background music with MP3
     // OPTION 1: Using Tone.js Player for MP3
     bgMusic = new Tone.Player({
-        url: "music/Original-Tetris-theme-(Tetris-Soundtrack).mp3", // Replace with your MP3 URL
+        url: "music/tetris-theme.mp3", // Replace with your MP3 URL
         loop: true,
         autostart: false
     }).toDestination();
-    bgMusic.volume.value = -10;
+    bgMusic.volume.value = -15;
 
     synth = new Tone.Synth({
         oscillator: { type: 'triangle' },

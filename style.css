@@ -8,7 +8,7 @@
 
 body {
     margin: 0;
-    background: #9BBC0F;
+    background: #8270f7;
     background-image: 
         repeating-linear-gradient(
             0deg,
@@ -41,9 +41,50 @@ body::before {
     background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.1) 100%);
 }
 
+.title {
+    font-family: 'Ubuntu', sans-serif;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center;
+}
+
+.title h1 {
+    color: #21165b;
+    text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.3);
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.gif {
+    position: absolute;
+    margin: 20rem 27.5rem 0 0;
+    z-index: 20;
+    width: 80px;
+    height: 80px;
+    /* border-radius: 8px; */
+    overflow: hidden;
+    /* border: 2px solid #0f380f;
+    box-shadow: 
+        0 0 0 1px #306230,
+        0 4px 12px rgba(0, 0, 0, 0.3);
+    background: #c8dfa0; */
+}
+
+.gif img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .credits {
     position: absolute;
-    bottom: 20px;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -54,7 +95,7 @@ body::before {
 .credits-title {
     font-size: 14px;
     font-weight: 700;
-    color: #0f380f;
+    color: #170f3e;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
     margin-bottom: 5px;
     letter-spacing: 1px;
@@ -63,7 +104,7 @@ body::before {
 .credits-subtitle {
     font-size: 11px;
     font-weight: 500;
-    color: #306230;
+    color: #170f3e;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
     letter-spacing: 0.5px;
 }
@@ -89,9 +130,9 @@ main {
 canvas {
     border-radius: 8px;
     display: block;
-    border: 8px solid #0f380f;
+    border: 8px solid #1a1045;
     box-shadow: 
-        0 0 0 4px #306230,
+        0 0 0 4px #383062,
         0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
